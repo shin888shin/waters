@@ -5,10 +5,29 @@ import (
 
 	"github.com/gofiber/fiber"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/shin888shin/waters/database"
 	"github.com/shin888shin/waters/lake"
 )
+
+const (
+	DBUser     = "postgres"
+	DBPassword = "secret"
+	DBName     = "theplanet"
+	DBHost     = "db"
+	DBPort     = "5432"
+	DBType     = "postgres"
+)
+
+func GetPostgresConnectionString() string {
+	dataBase := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+		DBHost,
+		DBPort,
+		DBUser,
+		DBName,
+		DBPassword)
+	return dataBase
+}
 
 func setupRoutes(app *fiber.App) {
 	app.Get("/api/v1/lake", lake.GetLakes)
@@ -19,7 +38,9 @@ func setupRoutes(app *fiber.App) {
 
 func initDatabase() {
 	var err error
-	database.DBConn, err = gorm.Open("sqlite3", "waters.db")
+	strDb := GetPostgresConnectionString()
+	// database.DBConn, err = gorm.Open("sqlite3", "waters.db")
+	database.DBConn, err = gorm.Open("postgres", strDb)
 	if err != nil {
 		panic("Failed to connect to database")
 	}
