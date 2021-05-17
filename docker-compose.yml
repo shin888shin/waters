@@ -1,0 +1,54 @@
+version: '3.8'
+
+# https://github.com/shin888shin/schools/blob/master/docker-compose.yml
+# cd /Users/joel/Documents/docker/schools
+# docker-compose up --build
+# http://localhost:8000/
+
+services:
+  api:
+    build:
+      context: .
+      # args:
+      #   app_env: ${APP_ENV}      
+    depends_on:
+      - db
+    restart: always
+    volumes:
+      - .:/go/src/github.com/shin888shin/waters
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    networks:
+      - waters-network
+
+# skip nginx
+#   nginx:
+#     restart: always
+#     build:
+#       dockerfile: Dockerfile.dev
+#       context: ./nginx
+#     ports:
+#       - '4000:80'
+#     depends_on:
+#       # - api
+#       - web
+#     networks:
+#       - schools-network
+  
+  db:
+    image: postgres:12.3
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: theplanet  
+    ports:
+      - "5432:5432"
+    command: postgres
+    networks:
+      - waters-network    
+networks:
+  waters-network:
+    driver: bridge

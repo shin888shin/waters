@@ -7,7 +7,6 @@
 # RUN go build -o main .
 # CMD ["/go/src/github.com/shin888shin/waters/main"]
 
-
 FROM golang:latest as builder
 WORKDIR /app
 COPY go.mod .
@@ -27,5 +26,4 @@ EXPOSE 8000
 # RUN chmod +x /wait
 
 CMD ["./main"]
-
 # docker build -t shin888shin/waters:latest .
