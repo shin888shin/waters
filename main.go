@@ -23,7 +23,7 @@ func setupRoutes(app *fiber.App) {
 
 func initDatabase() {
 	var err error
-	database.DBConn, err = gorm.Open("sqlite3", waters.db)
+	database.DBConn, err = gorm.Open("sqlite3", "waters.db")
 	if err != nil {
 		panic("Failed to connect to database")
 	}
