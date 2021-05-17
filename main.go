@@ -10,10 +10,6 @@ import (
 	"github.com/shin888shin/waters/lake"
 )
 
-func hello(c *fiber.Ctx) {
-	c.Send("hello")
-}
-
 func setupRoutes(app *fiber.App) {
 	app.Get("/api/v1/lake", lake.GetLakes)
 	app.Get("/api/v1/lake/:id", lake.GetLake)
@@ -28,7 +24,10 @@ func initDatabase() {
 		panic("Failed to connect to database")
 	}
 	fmt.Println("Database connection successfully opened")
+	database.DBConn.AutoMigrate(&lake.Lake{})
+	fmt.Println("Database migrated")
 }
+
 func main() {
 	app := fiber.New()
 	initDatabase()
